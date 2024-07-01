@@ -3,7 +3,7 @@ package com.asi.airport.data
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity("AirportTable")
+@Entity("airport")
 data class AirportEntity(
     @PrimaryKey(autoGenerate = true)
     var id : Int,

@@ -2,6 +2,7 @@ package com.asi.airport.data
 
 import android.content.Context
 import androidx.room.Room
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,18 +22,21 @@ object AirportModule {
         return Room.databaseBuilder(
             context,
             AirportDB::class.java,
-            "Schedule Database"
-        ).createFromAsset("database.flight_search.db").build()
+            "Schedule.db"
+        ).createFromAsset("database/flight_search.db").build()
     }
 
     @Provides
     fun createDao(db : AirportDB): AirportDao{
        return db.airportDao()
     }
-    @Provides
-    fun createRepo( airportDao: AirportDao) : AirportRepo{
-       return AirportOfflineRepo(airportDao)
-    }
+}
 
 
+
+@Module
+@InstallIn(SingletonComponent::class)
+interface CacheModule {
+    @Binds
+     fun createRepo( airPortOfflineRepo : AirportOfflineRepo) : AirportRepo
 }
