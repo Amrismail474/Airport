@@ -8,6 +8,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.debounce
@@ -23,7 +24,7 @@ import javax.inject.Inject
 class AirportViewmodel @Inject constructor(private val airportRepo: AirportRepo) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
-    val uistate: StateFlow<UiState> = _uiState
+    val uistate: StateFlow<UiState> = _uiState.asStateFlow()
 
 
     fun callAirport(code: String) {
@@ -35,8 +36,6 @@ class AirportViewmodel @Inject constructor(private val airportRepo: AirportRepo)
                         it.copy(airport = databaseResult.firstOrNull()?.toAirpot())
                     }
                 }
-
-
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(

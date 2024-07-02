@@ -35,18 +35,17 @@ import com.asi.airport.ui.theme.AirportTheme
 
 
 @Composable
-fun MainScreen(
-    viewModel: AirportViewmodel = hiltViewModel()
-){
-
+fun MainScreen(viewModel: AirportViewmodel = hiltViewModel()) {
 
     val uiState by viewModel.uistate.collectAsState()
     var code by remember { mutableStateOf("") }
 
     Scaffold(
-        topBar = { TopBar(title = "FLight Search")}
-    ) {padding->
-        Column(modifier = Modifier.padding(padding)) {
+        topBar = { TopBar(title = "FLight Search") }
+    ) { padding ->
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)) {
             ContentScreen(
                 code = code,
                 onValueChange = { code = it },
@@ -61,11 +60,9 @@ fun MainScreen(
             )
 
             uiState.airport?.let { airport ->
+                println(airport)
                 Column(
                     modifier = Modifier
-                        .padding(padding)
-                        .fillMaxSize()
-                        .wrapContentSize(Alignment.Center)
                 ) {
                     Text(text = "Airport: ${airport.name}")
                     Text(text = "IATA Code: ${airport.iata_code}")
@@ -79,35 +76,41 @@ fun MainScreen(
                     color = androidx.compose.material3.MaterialTheme.colorScheme.error,
                     modifier = Modifier.padding(padding)
                 )
-            }}}}
-
-
-
-
-
+            }
+        }
+    }
+}
 
 
 @Composable
 fun ContentScreen(
-    modifier : Modifier = Modifier,
+    modifier: Modifier = Modifier,
     code: String,
-    onValueChange : (String)-> Unit,
+    onValueChange: (String) -> Unit,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    onClick : (String) -> Unit,
+    onClick: (String) -> Unit,
 
-){
-    Box(modifier.fillMaxSize()){
+    ) {
+    Box(modifier) {
         Column(
-            modifier.padding(30.dp).align(Alignment.TopCenter),verticalArrangement= Arrangement.Center,
+            modifier
+                .padding(30.dp)
+                .align(Alignment.TopCenter), verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            TextField(value = code,
-                onValueChange = onValueChange)
+        ) {
+            TextField(
+                value = code,
+                onValueChange = onValueChange
+            )
 
-            Button(onClick = {onClick(code)},
-                modifier = modifier.width(200.dp).padding(16.dp).wrapContentSize()
+            Button(
+                onClick = { onClick(code) },
+                modifier = modifier
+                    .width(200.dp)
+                    .padding(16.dp)
+                    .wrapContentSize()
             ) {
-                Text(text = "Search",modifier.padding(10.dp))
+                Text(text = "Search", modifier.padding(10.dp))
             }
         }
     }
@@ -116,7 +119,7 @@ fun ContentScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(title: String){
+fun TopBar(title: String) {
     TopAppBar(
         title = { Text(title) },
         colors = TopAppBarDefaults.topAppBarColors()
@@ -127,8 +130,8 @@ fun TopBar(title: String){
 
 @Preview
 @Composable
-fun preview(){
+fun preview() {
     AirportTheme {
-        ContentScreen(onValueChange = {},onClick = {}, code="IJK")
+        ContentScreen(onValueChange = {}, onClick = {}, code = "IJK")
     }
 }
